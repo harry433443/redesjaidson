@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interação de redes</title>
+    <style>
+        #chatbox {
+            width: 300px;
+            height: 300px;
+            border: 1px solid green;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+<body>
+    <div id="chatbox"></div>
+    <input type="text" id="message" placeholder="Digite sua mensagem">
+    <button onclick="sendMessage()">Enviar</button>
+
+    <script>
+        // Cria uma conexão WebSocket com o servidor
+        const socket = new WebSocket('ws://192.168.1.107');
+
+        // Função para exibir mensagens no chatbox
+        function displayMessage(message) {
+            const chatbox = document.getElementById('chatbox');
+            chatbox.innerHTML += `<p>${message}</p>`;
+        }
+
+        // Evento disparado quando uma mensagem é recebida do servidor
+        socket.addEventListener('message', function(event) {
+            displayMessage(event.data);
+        });
+
+        // Função para enviar mensagens ao servidor
+        function sendMessage() {
+            const messageInput = document.getElementById('message');
+            const message = messageInput.value;
+            socket.send(message);
+            messageInput.value = '';
+        }
+    </script>
+</body>
+</html>
